@@ -17,15 +17,13 @@ void stc(int color) {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
-
-void StartSettings()
+void StartSettings() // Setzt die Start settings der console
 {
 	scv(false);
 	SetConsoleTitle(TEXT("Tic Tac Toe"));
 	system("mode 21, 20");
 }
-
-void logo()
+void logo() // Zeichnet das Logo
 {
 	int rgb;
 	srand(time(NULL));
@@ -40,7 +38,7 @@ void logo()
 	stc(7);
 	printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD");
 }
-void draw(char map[7][8],char &spieler)
+void draw(char map[7][8],char &spieler) // Zeichnet die "Map"
 {
 	system("cls");
 	logo();
@@ -60,10 +58,9 @@ void draw(char map[7][8],char &spieler)
 	}
 	scp(9, 15);
 	stc(12);
-	printf("%c", spieler);
+	printf("%c <-", spieler);
 	stc(7);
 }
-
 void sw(char &spieler) // Spieler Wechsel
 {
 	if (spieler == 'X')
@@ -75,7 +72,6 @@ void sw(char &spieler) // Spieler Wechsel
 		spieler = 'X';
 	}
 }
-
 void sp(char &spieler) // zufälliger spieler
 {
 	int rng;
@@ -84,8 +80,7 @@ void sp(char &spieler) // zufälliger spieler
 	if (rng == 1) { spieler = 'X'; }
 	if (rng == 2) { spieler = 'O'; }
 }
-
-void drawNumbers(char map[7][8])
+void drawNumbers(char map[7][8]) // Hier werden die nummern gezeichnet, wenn eine nummer schon vergeben ist wird diese mit einem "-" makiert
 {
 	char auswahl[4][4] = { "123","456","789" };
 	printf("\n\n\t");
@@ -107,12 +102,11 @@ void drawNumbers(char map[7][8])
 		printf("\n\t");
 	}
 }
-
-void pinput(char& spieler, char map[7][8])
+void pinput(char& spieler, char map[7][8]) // hier wird der playerinput geregelt
 {
 	int ausw;
 	int succ = 0;
-
+	
 	do {
 		draw(map, spieler);
 		drawNumbers(map);
@@ -129,7 +123,6 @@ void pinput(char& spieler, char map[7][8])
 		if (ausw == 9 && map[5][5] != 'X' && map[5][5] != 'O') { map[5][5] = spieler; succ = 1; }
 	} while (succ == 0);
 }
-
 void checkwin(int& run, char& spieler, char map[7][8])
 {
 	// Spieler 1 Check ob gewonnen X
@@ -160,13 +153,46 @@ void checkwin(int& run, char& spieler, char map[7][8])
 
 }
 
+void winnerX()
+{
+	char winnerX[23][22] = { "111111111111111111111","111211121111111111111","111211121111111111111","111222221222212112111","111112111211212112111","111112111222212222111","111111111111111111111","111211121111111111111","111212121222212221111","111212121211212112111","111222221222212112111","111111111111111111111","111111111111111111111","111111113111311111111","111111111313111111111","111111111131111111111","111111111313111111111","111111113111311111111","111111111111111111111","111111111111111111111" };
+
+	for (int y = 0; y < 26; ++y)
+	{
+		for (int x = 0; x < 22; ++x)
+		{
+			if (winnerX[y][x] == '1') printf("\xDB");
+			if (winnerX[y][x] == '2') { stc(11); printf("\xDB"); stc(7); }
+			if (winnerX[y][x] == '3') { stc(12); printf("\xDB"); stc(7); }
+		}
+	}
+}
+void winnerO()
+{
+	{
+		char winnerX[23][22] = { "111111111111111111111","111211121111111111111","111211121111111111111","111222221222212112111","111112111211212112111","111112111222212222111","111111111111111111111","111211121111111111111","111212121222212221111","111212121211212112111","111222221222212112111","111111111111111111111","111111111111111111111","111111111333111111111","111111113111311111111","111111113111311111111","111111113111311111111","111111111333111111111","111111111111111111111","111111111111111111111" };
+
+		for (int y = 0; y < 26; ++y)
+		{
+			for (int x = 0; x < 22; ++x)
+			{
+				if (winnerX[y][x] == '1') printf("\xDB");
+				if (winnerX[y][x] == '2') { stc(11); printf("\xDB"); stc(7); }
+				if (winnerX[y][x] == '3') { stc(12); printf("\xDB"); stc(7); }
+			}
+		}
+	}
+}
+
 void winner(char &spieler)
 {
 	sw(spieler);
 	system("CLS");
-	printf("Winner is %c", spieler);
+	if (spieler == 'X') winnerX();
+	if(spieler == 'O') winnerO();
 	_getch();
 }
+
 int main()
 {
 	char map[7][8] = { 
@@ -185,7 +211,7 @@ int main()
 
 	sp(spieler);
 	draw(map, spieler);
-	
+
 	while (run == 1)
 	{
 		
@@ -194,6 +220,7 @@ int main()
 		checkwin(run, spieler, map);
 		sw(spieler);
 	}
+
 	winner(spieler);
 
 	system(" PAUSE ");
